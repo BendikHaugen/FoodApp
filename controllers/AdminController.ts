@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { CreateVandorInput } from "../dto";
+import { Vandor } from "../models";
 
 const CreateVandor = async (
   req: Request,
@@ -16,6 +17,22 @@ const CreateVandor = async (
     ownerName,
     phone,
   } = <CreateVandorInput>req.body;
+
+  const createdVandor = await Vandor.create({
+    name: name,
+    address: address,
+    pincode: pincode,
+    foodType: foodType,
+    email: email,
+    password: password,
+    ownerName: ownerName,
+    phone: phone,
+    salt: "",
+    serviceAvailable: false,
+    coverImages: [],
+    rating: 0,
+  });
+
   return res.json({
     name,
     address,
