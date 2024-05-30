@@ -26,8 +26,6 @@ const CreateVandor = async (
     ownerName,
     phone,
   });
-
-  res.json({ message: "Create Vandor" });
 };
 
 const GetVandors = async (req: Request, res: Response, next: NextFunction) => {
