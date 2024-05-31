@@ -14,7 +14,9 @@ app.use("/vandor", VandorRoute);
 
 mongoose
   .connect(MONGO_URI)
-  .then((result) => console.log("Connected to MongoDB  \n " + result))
+  .then((result) =>
+    console.log("Connected to MongoDB  \n" + "Host: " + result.connection.host)
+  )
   .catch((err) => console.log("Error " + err));
 
 app.listen(8000, () => {
