@@ -18,6 +18,14 @@ const CreateVandor = async (
     phone,
   } = <CreateVandorInput>req.body;
 
+  const existingVandor = await Vandor.findOne({ email: email });
+
+  if (existingVandor) {
+    return res
+      .status(400)
+      .json({ message: `Vandor with email: ${email} already exists` });
+  }
+
   const createdVandor = await Vandor.create({
     name: name,
     address: address,
@@ -27,22 +35,13 @@ const CreateVandor = async (
     password: password,
     ownerName: ownerName,
     phone: phone,
-    salt: "",
+    salt: "SALT",
     serviceAvailable: false,
     coverImages: [],
     rating: 0,
   });
 
-  return res.json({
-    name,
-    address,
-    pincode,
-    foodType,
-    email,
-    password,
-    ownerName,
-    phone,
-  });
+  return res.json(createdVandor);
 };
 
 const GetVandors = async (req: Request, res: Response, next: NextFunction) => {

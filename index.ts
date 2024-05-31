@@ -17,7 +17,7 @@ mongoose
   .then((result) =>
     console.log("Connected to MongoDB  \n" + "Host: " + result.connection.host)
   )
-  .catch((err) => console.log("Error " + err));
+  .catch((err) => console.log("Error: " + err));
 
 app.listen(8000, () => {
   console.clear();
