@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { CreateVandorInput } from "../dto";
 import { Vandor } from "../models";
+import { genSalt } from "bcrypt";
+import { GeneratePassword, GenerateSalt } from "../utility";
 
 const CreateVandor = async (
   req: Request,
@@ -26,16 +28,19 @@ const CreateVandor = async (
       .json({ message: `Vandor with email: ${email} already exists` });
   }
 
+  const salt = await GenerateSalt();
+  const userPassword = await GeneratePassword(password, salt);
+
   const createdVandor = await Vandor.create({
     name: name,
     address: address,
     pincode: pincode,
     foodType: foodType,
     email: email,
-    password: password,
+    password: userPassword,
     ownerName: ownerName,
     phone: phone,
-    salt: "SALT",
+    salt: salt,
     serviceAvailable: false,
     coverImages: [],
     rating: 0,

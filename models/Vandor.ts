@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
 interface VandorDoc extends Document {
   name: string;
@@ -39,6 +39,15 @@ const VandorSchema: Schema = new Schema(
   },
   {
     timestamps: true,
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.password,
+          delete ret.salt,
+          delete ret.__v,
+          delete ret.createdAt,
+          delete ret.updatedAt;
+      },
+    },
   }
 );
 
