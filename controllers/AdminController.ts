@@ -26,7 +26,7 @@ const CreateVandor = async (
     phone,
   } = <CreateVandorInput>req.body;
 
-  const existingVandor = await Vandor.findOne({ email: email });
+  const existingVandor = await FindVandor(email);
 
   if (existingVandor) {
     return res
@@ -72,7 +72,7 @@ const GetVanodrById = async (
 ) => {
   const vandorId = req.params.id;
 
-  const vandor = await Vandor.findById(vandorId);
+  const vandor = await FindVandor(vandorId);
 
   if (vandor !== null) {
     return res.json(vandor);
