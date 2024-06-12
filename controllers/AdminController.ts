@@ -1,8 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { CreateVandorInput } from "../dto";
 import { Vandor } from "../models";
-import { genSalt } from "bcrypt";
 import { GeneratePassword, GenerateSalt } from "../utility";
+
+export const FindVandor = async (id: string | undefined, email?: string) => {
+  if (id) {
+    return await Vandor.findById(id);
+  }
+  return await Vandor.findOne({ email: email });
+};
 
 const CreateVandor = async (
   req: Request,
@@ -50,7 +56,13 @@ const CreateVandor = async (
 };
 
 const GetVandors = async (req: Request, res: Response, next: NextFunction) => {
-  res.json({ message: "Get Vandors" });
+  const vandors = await Vandor.find();
+
+  if (vandors !== null) {
+    return res.json(vandors);
+  }
+
+  return res.json({ message: "Vandors data not available" });
 };
 
 const GetVanodrById = async (
@@ -58,7 +70,15 @@ const GetVanodrById = async (
   res: Response,
   next: NextFunction
 ) => {
-  res.json({ message: "Update Vandor" });
+  const vandorId = req.params.id;
+
+  const vandor = await Vandor.findById(vandorId);
+
+  if (vandor !== null) {
+    return res.json(vandor);
+  }
+
+  return res.json({ message: "Vandors data not available" });
 };
 
 export { CreateVandor, GetVandors, GetVanodrById };
