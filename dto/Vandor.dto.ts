@@ -20,3 +20,10 @@ export interface VandorPayload {
   name: string;
   foodtypes: string[];
 }
+
+export interface EditVandorInputs {
+  name: string;
+  address: string;
+  phone: string;
+  foodTypes: [string];
+}
