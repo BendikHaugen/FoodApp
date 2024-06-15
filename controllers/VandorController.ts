@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { EditVandorInputs, VandorLoginInputs } from "../dto";
 import { GenerateSignature, ValidatePassword } from "../utility";
 import { FindVandor } from "./AdminController";
+import { CreateFoodInputs } from "../dto/Food.dto";
+import { Food } from "../models";
 
 const VandorLogin = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = <VandorLoginInputs>req.body;
@@ -85,9 +87,36 @@ const UpdateVandorService = async (
   return res.json({ message: "Vandor information not found" });
 };
 
+const addFood = async (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user;
+
+  if (user) {
+    // prettier-ignore
+    const { name, description, category, foodType, readyTime, price } = <CreateFoodInputs>req.body;
+    const vandor = await FindVandor(user._id);
+    if (vandor) {
+      const createdFood = await Food.create({
+        vandorId: vandor._id,
+        name: name,
+        description: description,
+        category: category,
+        foodType: foodType,
+        images: [],
+      });
+      vandor.foods.push(createdFood);
+      const result = await vandor.save();
+
+      return res.json(result);
+    }
+  }
+};
+
+const getFoods = async (req: Request, res: Response, next: NextFunction) => {};
+
 export {
   GetVandorProfile,
   UpdateVandorProfile,
   UpdateVandorService,
   VandorLogin,
+  addFood,
 };

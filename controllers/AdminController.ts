@@ -50,6 +50,7 @@ const CreateVandor = async (
     serviceAvailable: false,
     coverImages: [],
     rating: 0,
+    foods: [],
   });
 
   return res.json(createdVandor);

@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { Food } from "./Food";
 
 interface VandorDoc extends Document {
   name: string;
@@ -13,7 +14,7 @@ interface VandorDoc extends Document {
   serviceAvailable: boolean;
   coverImages: [string];
   rating: number;
-  // foods: any;
+  foods: any;
 }
 
 const VandorSchema: Schema = new Schema(
@@ -30,12 +31,12 @@ const VandorSchema: Schema = new Schema(
     serviceAvailable: { type: Boolean },
     coverImages: { type: [String] },
     rating: { type: Number, required: true },
-    //foods: [
-    //  {
-    //    type: mongoose.Schema.Types.ObjectId,
-    //    ref: "food",
-    //  },
-    //],
+    foods: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "food",
+      },
+    ],
   },
   {
     timestamps: true,
