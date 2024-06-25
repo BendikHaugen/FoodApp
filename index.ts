@@ -1,27 +1,16 @@
 import express from "express";
-import { AdminRoute, VandorRoute } from "./routes";
-import bodyParser from "body-parser";
-import mongoose from "mongoose";
-import { MONGO_URI } from "./config";
-import path from "path";
+import Application from "./services/ExpressApp";
+import dbConnecttion from "./services/Database";
 
-const app = express();
+const StartServer = async () => {
+  const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/images", express.static(path.join(__dirname, "images")));
+  await dbConnecttion();
 
-app.use("/admin", AdminRoute);
-app.use("/vandor", VandorRoute);
+  await Application(app);
 
-mongoose
-  .connect(MONGO_URI)
-  .then((result) =>
-    console.log("Connected to MongoDB  \n" + "Host: " + result.connection.host)
-  )
-  .catch((err) => console.log("Error: " + err));
-
-app.listen(8000, () => {
-  console.clear();
-  console.log("App is listening to port 8000");
-});
+  app.listen(8000, () => {
+    console.clear();
+    console.log("App is listening to port 8000");
+  });
+};
