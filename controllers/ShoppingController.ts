@@ -110,10 +110,63 @@ export const SearchFoods = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  const { pincode } = req.params;
+  // QUERY IS UNCECKED
+  const result = await Food.aggregate([
+    {
+      $lookup: {
+        from: "vendors",
+        localField: "vendorId",
+        foreignField: "_id",
+        as: "vendor",
+      },
+    },
+    {
+      $unwind: {
+        path: "$vendor",
+      },
+    },
+    {
+      $match: {
+        $and: [
+          { "vendor.pinCode": pincode },
+          {
+            "vendor.serviceAvailable": {
+              $eq: true,
+            },
+          },
+        ],
+      },
+    },
+    // TODO: Remove and add fields based on the requirement
+    // {
+    //   $set: {
+    //     pinCode: pinCode,
+    //   },
+    // },
+    // {
+    //   $unset: 'vendor',
+    // },
+  ]);
+
+  if (result.length) {
+    return res.status(200).json(result);
+  }
+  return res.status(400).json({ message: "No available restaurants found" });
+};
 
 export const RestaurantById = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  const { _id } = req.params;
+  const result = await Vandor.findById(_id).populate("foods");
+
+  if (result) {
+    return res.status(200).json(result);
+  }
+
+  return res.status(400).json({ message: "No such resturant exists" });
+};
