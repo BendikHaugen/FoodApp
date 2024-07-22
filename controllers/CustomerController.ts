@@ -153,6 +153,8 @@ export const CustomerVerify = async (
   }
 };
 
+export const;
+
 export const GetCustomerProfile = async (
   req: Request,
   res: Response,
