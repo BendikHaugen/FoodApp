@@ -3,18 +3,19 @@ import {
   CustomerSignup,
   CustomerVerify,
   CustomerLogin,
-  RequestOtp,
+  RequestOTP,
   GetCustomerProfile,
   EditCustomerProfile,
 } from "../controllers";
+import { Authenticate } from "../middlewares";
 
 const router = express.Router();
 
 router.post("/signup", CustomerSignup);
 router.get("/login", CustomerLogin);
-
+router.use(Authenticate);
 router.get("/verify", CustomerVerify);
-router.get("/otp", RequestOtp);
+router.get("/otp", RequestOTP);
 router.get("/profile", GetCustomerProfile);
 router.patch("/profile", EditCustomerProfile);
 
