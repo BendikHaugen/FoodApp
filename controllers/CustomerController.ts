@@ -1,7 +1,11 @@
 import express, { Request, Response, NextFunction } from "express";
 import { plainToClass, plainToInstance } from "class-transformer";
-import { CreateCustomerInputs, UserLoginInputs } from "../dto/Customer.dto";
-import { validate } from "class-validator";
+import {
+  CreateCustomerInputs,
+  EditCustomerProfileInputs,
+  UserLoginInputs,
+} from "../dto/Customer.dto";
+import { ValidationError, validate } from "class-validator";
 import {
   GeneratePassword,
   GenerateSalt,
@@ -153,14 +157,76 @@ export const CustomerVerify = async (
   }
 };
 
+export const RequestOTP = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const customer = req.user;
+
+  if (customer) {
+    const profile = await Customer.findById(customer._id);
+
+    if (profile) {
+      const { otp, expiry } = generateOTP();
+      profile.otp = otp;
+      profile.otp_expiry = expiry;
+
+      await profile.save();
+
+      await onRequestOTP(otp, profile.phone);
+
+      return res
+        .status(201)
+        .json({ message: "OTP sent to registered phone number" });
+    }
+  }
+  return res.status(404).json({ message: "Error with OTP request" });
+};
+
 export const GetCustomerProfile = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  const customer = req.user;
+
+  if (customer) {
+    const profile = await Customer.findById(customer._id);
+    if (profile) {
+      return res.status(200).json(profile);
+    }
+  }
+  return res.status(404).json({ message: "User not found" });
+};
 
 export const EditCustomerProfile = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {};
+) => {
+  const customer = req.user;
+
+  const profileInputs = plainToInstance(EditCustomerProfileInputs, req.body);
+
+  const profileErrors = await validate(profileInputs, {
+    validationError: { target: false },
+  });
+  if (!profileErrors.length) {
+    return res.status(400).json({ errors: profileErrors });
+  }
+
+  if (customer) {
+    const profile = await Customer.findById(customer._id);
+    if (profile) {
+      const { firstName, lastName, address } = profile;
+      profile.firstName = firstName;
+      profile.lastName = lastName;
+      profile.address = address;
+
+      const result = await profile.save();
+
+      return res.status(200).json(result);
+    }
+  }
+};

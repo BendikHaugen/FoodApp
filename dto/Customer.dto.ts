@@ -23,3 +23,12 @@ export class UserLoginInputs {
   @Length(6, 12)
   password: string;
 }
+
+export class EditCustomerProfileInputs {
+  @Length(3, 20)
+  firstName: string;
+  @Length(3, 20)
+  lastName: string;
+  @Length(3, 20)
+  address: string;
+}
