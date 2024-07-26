@@ -6,6 +6,9 @@ import {
   RequestOTP,
   GetCustomerProfile,
   EditCustomerProfile,
+  getOrders,
+  getOrderById,
+  createOrder,
 } from "../controllers";
 import { Authenticate } from "../middlewares";
 
@@ -18,5 +21,9 @@ router.get("/verify", CustomerVerify);
 router.get("/otp", RequestOTP);
 router.get("/profile", GetCustomerProfile);
 router.patch("/profile", EditCustomerProfile);
+router.get("/orders", getOrders);
+router.get("/order/:id", getOrderById);
+router.post("/create-order", createOrder);
+router.get("/profile", GetCustomerProfile);
 
 export { router as CustomerRoute };

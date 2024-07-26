@@ -230,3 +230,21 @@ export const EditCustomerProfile = async (
     }
   }
 };
+
+export const createOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};
+
+export const getOrders = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};
+
+export const getOrderById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {};

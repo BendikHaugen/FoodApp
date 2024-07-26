@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const ExpressApp_1 = __importDefault(require("./services/ExpressApp"));
 const Database_1 = __importDefault(require("./services/Database"));
+const config_1 = require("./config");
 const StartServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log("Starting server");
@@ -25,11 +26,12 @@ const StartServer = () => __awaiter(void 0, void 0, void 0, function* () {
         yield (0, ExpressApp_1.default)(app);
         app.listen(8000, () => {
             console.clear();
-            console.log("App is listening to port 8000");
+            console.log(`App is listening to port ${config_1.PORT}`);
         });
     }
     catch (error) {
         console.error("Startup error:", error);
     }
 });
+StartServer();
 //# sourceMappingURL=index.js.map

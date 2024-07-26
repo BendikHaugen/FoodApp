@@ -20,3 +20,5 @@ const StartServer = async () => {
     console.error("Startup error:", error);
   }
 };
+
+StartServer();
