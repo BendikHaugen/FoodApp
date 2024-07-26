@@ -7,3 +7,5 @@ mongodb+srv://bhau:foodapplocal@foodapp.imxuxlo.mongodb.net/?retryWrites=true&w=
 */
 
 export const APP_SECRET = "App_secret";
+
+export const PORT = process.env.PORT || 8000;
